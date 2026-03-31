@@ -56,7 +56,12 @@ class User extends Authenticatable implements HasName
         // Логіка: Спробуй взяти 'name'. Якщо його немає або воно пусте ->
         // спробуй взяти 'first_name'. Якщо і його немає ->
         // поверни Email.
-        
+
         return $this->name ?? $this->first_name ?? $this->email;
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

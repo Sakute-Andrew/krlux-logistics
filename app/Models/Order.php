@@ -1,5 +1,7 @@
 <?php
 
+// app/Models/Order.php  — оновлена версія з новими зв'язками
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,39 +11,49 @@ class Order extends Model
 {
     use HasFactory;
 
-    // Дозволяємо масове заповнення цих полів
     protected $fillable = [
         'user_id',
+        'driver_id',       // НОВЕ
+        'promo_code_id',   // НОВЕ
         'customer_name',
         'phone',
         'email',
-        'vehicle_type_id', // Важливо: тут ID, а не назва
+        'vehicle_type_id',
         'pickup_address',
         'delivery_address',
         'distance_km',
         'total_price',
+        'discount_amount', // НОВЕ
         'scheduled_at',
         'status',
         'customer_note',
         'admin_note',
+        'tracking_token'
     ];
 
-    // Вказуємо, що ці поля - це дати, щоб Laravel зручно з ними працював
     protected $casts = [
         'scheduled_at' => 'datetime',
     ];
 
-    // --- ЗВ'ЯЗКИ (RELATIONSHIPS) ---
+    // --- ЗВ'ЯЗКИ ---
 
-    // Замовлення належить конкретному типу авто
     public function vehicleType()
     {
         return $this->belongsTo(VehicleType::class);
     }
 
-    // Замовлення може належати юзеру
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
+    }
+
+    public function promoCode()
+    {
+        return $this->belongsTo(PromoCode::class);
     }
 }

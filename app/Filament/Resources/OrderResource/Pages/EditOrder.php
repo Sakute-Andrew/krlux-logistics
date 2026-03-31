@@ -1,4 +1,5 @@
 <?php
+// app/Filament/Resources/OrderResource/Pages/EditOrder.php
 
 namespace App\Filament\Resources\OrderResource\Pages;
 
@@ -13,7 +14,19 @@ class EditOrder extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        // Після збереження — назад на сторінку перегляду
+        return $this->getResource()::getUrl('view', ['record' => $this->getRecord()]);
+    }
+
+    protected function getSavedNotificationTitle(): ?string
+    {
+        return 'Замовлення оновлено';
     }
 }

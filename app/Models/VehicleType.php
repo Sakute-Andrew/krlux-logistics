@@ -37,4 +37,5 @@ class VehicleType extends Model
         'price_per_km' => 'decimal:2',
         'start_price' => 'decimal:2',
     ];
+
 }

@@ -15,6 +15,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Grid;
+use Illuminate\Database\Eloquent\Builder;
 
 class VehicleTypeResource extends Resource
 {
@@ -34,7 +35,7 @@ class VehicleTypeResource extends Resource
                                 ->label('Назва авто')
                                 ->required()
                                 ->placeholder('Наприклад: Sprinter Maxi'),
-                            
+
                             TextInput::make('slug')
                                 ->label('URL-ім\'я (slug)')
                                 ->required()
@@ -47,7 +48,7 @@ class VehicleTypeResource extends Resource
                             ->directory('vehicles')
                             ->visibility('public')
                             ->columnSpanFull(),
-                            
+
                         Textarea::make('description')
                             ->label('Опис для клієнта')
                             ->rows(3)
@@ -75,7 +76,7 @@ class VehicleTypeResource extends Resource
                                 ->label('Ціна подачі (€)')
                                 ->numeric()
                                 ->prefix('€'),
-                            
+
                             TextInput::make('price_per_km')
                                 ->label('Ціна за 1 км (€)')
                                 ->numeric()
@@ -99,7 +100,22 @@ class VehicleTypeResource extends Resource
                 Tables\Columns\ToggleColumn::make('is_active')->label('Активний'),
             ])
             ->filters([
-                //
+                // Активність — три стани: всі / тільки активні / тільки неактивні
+                Tables\Filters\TernaryFilter::make('is_active')
+                    ->label('Активність')
+                    ->trueLabel('Тільки активні')
+                    ->falseLabel('Тільки неактивні')
+                    ->placeholder('Всі'),
+
+                // Чи заповнений тариф
+                Tables\Filters\Filter::make('has_price')
+                    ->label('Є тариф (€/км)')
+                    ->query(fn (Builder $query) => $query->whereNotNull('price_per_km')->where('price_per_km', '>', 0)),
+
+                // Чи заповнені габарити
+                Tables\Filters\Filter::make('has_dimensions')
+                    ->label('Є габарити')
+                    ->query(fn (Builder $query) => $query->whereNotNull('length_m')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
