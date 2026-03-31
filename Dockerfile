@@ -36,4 +36,5 @@ COPY ./docker/nginx.conf /etc/nginx/sites-available/default
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+# Використовуємо абсолютний шлях до бінарників
+CMD ["sh", "-c", "/usr/local/sbin/php-fpm -D && nginx -g 'daemon off;'"]
