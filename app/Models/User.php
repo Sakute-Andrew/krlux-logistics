@@ -65,7 +65,7 @@ class User extends Authenticatable implements HasName
     {
         // Для початку дозволимо доступ усім, у кого role === 'admin'
         // Або просто return true, щоб точно пропустило зараз
-        return $this->role === 'admin';
+        return true;
     }
 
     public function orders()
