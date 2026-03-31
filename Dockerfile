@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libicu-dev \
     libzip-dev \
-    zip unzip git curl nginx nodejs npm
+    zip unzip git curl nginx nodejs gettext-base npm
 
 RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd intl zip
 
