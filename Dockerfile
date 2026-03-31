@@ -37,4 +37,4 @@ COPY ./docker/nginx.conf /etc/nginx/sites-available/default
 EXPOSE 80
 
 # Використовуємо повний шлях до php-fpm, який є стандартом для образу 8.3-fpm
-CMD ["sh", "-c", "/usr/local/sbin/php-fpm -D && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan filament:assets && /usr/local/sbin/php-fpm -D && nginx -g 'daemon off;'"]
