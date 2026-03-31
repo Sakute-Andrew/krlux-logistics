@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libicu-dev \
     libzip-dev \
-    zip unzip git curl nginx nodejs npm
+    zip unzip git curl nginx nodejs gettext-base npm
 
 RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd intl zip
 
@@ -26,7 +26,7 @@ COPY ./docker/nginx.conf /etc/nginx/sites-available/default
 
 RUN echo "listen = 127.0.0.1:9000" >> /usr/local/etc/php-fpm.d/www.conf
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["sh", "-c", "\
     php artisan config:cache && \
@@ -34,4 +34,5 @@ CMD ["sh", "-c", "\
     php artisan migrate --force && \
     php artisan filament:assets && \
     /usr/local/sbin/php-fpm -D && \
+    envsubst '${PORT}' < /etc/nginx/sites-available/default > /etc/nginx/sites-enabled/default && \
     nginx -g 'daemon off;'"]
