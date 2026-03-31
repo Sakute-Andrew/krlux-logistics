@@ -3,6 +3,7 @@ FROM php:8.3-fpm
 # Встановлення системних залежностей
 RUN apt-get update && apt-get install -y \
     libpng-dev \
+    libpq-dev \
     libonig-dev \
     libxml2-dev \
     libicu-dev \
@@ -14,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     nginx
 
 # PHP розширення
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd intl zip
+RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd intl zip
 
 # Копіюємо проєкт
 COPY . /var/www
