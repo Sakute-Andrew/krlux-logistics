@@ -15,12 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-       User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('123123'),
-           'role' => 'admin',
-        ]);
+        // Коментуємо це, щоб не викликати помилку fake()
+        // \App\Models\User::factory(10)->create();
 
+        // Створюємо конкретного адміна
+        \App\Models\User::updateOrCreate(
+            ['email' => 'admin@admin.com'], // шукаємо по email
+            [
+                'name' => 'Admin',
+                'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+                'role' => 'admin',
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }
