@@ -1,4 +1,4 @@
-FROM php:8.3
+FROM php:8.3-fpm
 
 # Встановлення системних залежностей
 RUN apt-get update && apt-get install -y \
@@ -22,19 +22,19 @@ WORKDIR /var/www
 
 # Встановлення Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Дозволяємо Composer працювати під root (для Docker білду)
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
+# Встановлюємо залежності
 RUN composer install --no-dev --optimize-autoloader
 
-# Налаштування прав
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# Фікс прав (враховуючи твою минулу помилку)
+RUN mkdir -p /var/www/storage /var/www/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Копіюємо конфіг Nginx
 COPY ./docker/nginx.conf /etc/nginx/sites-available/default
 
 EXPOSE 80
 
-# Використовуємо абсолютний шлях до бінарників
+# Використовуємо повний шлях до php-fpm, який є стандартом для образу 8.3-fpm
 CMD ["sh", "-c", "/usr/local/sbin/php-fpm -D && nginx -g 'daemon off;'"]
