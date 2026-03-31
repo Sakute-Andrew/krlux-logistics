@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -58,6 +59,13 @@ class User extends Authenticatable implements HasName
         // поверни Email.
 
         return $this->name ?? $this->first_name ?? $this->email;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Для початку дозволимо доступ усім, у кого role === 'admin'
+        // Або просто return true, щоб точно пропустило зараз
+        return $this->role === 'admin';
     }
 
     public function orders()
