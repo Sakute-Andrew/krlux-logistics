@@ -103,6 +103,7 @@ class VehicleTypeResource extends Resource
                         FileUpload::make('image_path')
                             ->label('Фото автомобіля')
                             ->image()
+                            ->disk('public')
                             ->directory('vehicles')
                             ->visibility('public')
                             ->columnSpanFull(),
