@@ -28,7 +28,9 @@ class Order extends Model
         'status',
         'customer_note',
         'admin_note',
-        'tracking_token'
+        'tracking_token',
+        'locale',
+        'service_type'
     ];
 
     protected $casts = [

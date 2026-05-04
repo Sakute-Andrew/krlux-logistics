@@ -25,6 +25,7 @@ class CarController extends Controller
             'car_id' => 'required|exists:cars,id',
             'client_name' => 'required|string',
             'phone' => 'required|string',
+            'service_type' => $request->input('service_type', 'transport'),
         ]);
 
         $order = \App\Models\Order::create($validated);

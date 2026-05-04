@@ -15,7 +15,6 @@ class VehicleType extends Model
     protected $fillable = [
         'name',
         'slug',
-        'description',
         'image_path',
         'length_m',
         'width_m',
@@ -25,6 +24,10 @@ class VehicleType extends Model
         'price_per_km',
         'start_price',
         'is_active',
+        'description_uk',
+        'description_ru',
+        'description_en',
+        'description_de',
     ];
 
     // Вказуємо типи даних (щоб цифри були цифрами, а булеві - true/false)

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Замовлення #{{ $order->id }} — KrLux Logistics</title>
+    <title>{{ __('emails.order_title') }} #{{ $order->id }} — KrLux Logistics</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#F2F0EB] min-h-screen font-sans">
@@ -23,17 +23,17 @@
         <div class="p-6 border-b border-[#F2F0EB]">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-[#1A1A1A]/50">Замовлення</p>
+                    <p class="text-sm text-[#1A1A1A]/50">{{ __('emails.order_title') }}</p>
                     <p class="text-2xl font-bold text-[#1A1A1A]">#{{ $order->id }}</p>
                 </div>
 
                 @php
                     $statusConfig = match($order->status) {
-                        'pending'     => ['label' => 'Очікує підтвердження', 'bg' => 'bg-yellow-100', 'text' => 'text-yellow-800'],
-                        'in_progress' => ['label' => 'В дорозі',             'bg' => 'bg-blue-100',   'text' => 'text-blue-800'],
-                        'completed'   => ['label' => 'Завершено',            'bg' => 'bg-green-100',  'text' => 'text-green-800'],
-                        'cancelled'   => ['label' => 'Скасовано',            'bg' => 'bg-red-100',    'text' => 'text-red-800'],
-                        default       => ['label' => $order->status,         'bg' => 'bg-gray-100',   'text' => 'text-gray-800'],
+                        'pending'     => ['label' => __('emails.status_pending'),   'bg' => 'bg-yellow-100', 'text' => 'text-yellow-800'],
+                        'in_progress' => ['label' => __('emails.status_progress'),  'bg' => 'bg-blue-100',   'text' => 'text-blue-800'],
+                        'completed'   => ['label' => __('emails.status_completed'), 'bg' => 'bg-green-100',  'text' => 'text-green-800'],
+                        'cancelled'   => ['label' => __('emails.status_cancelled'), 'bg' => 'bg-red-100',    'text' => 'text-red-800'],
+                        default       => ['label' => $order->status,               'bg' => 'bg-gray-100',   'text' => 'text-gray-800'],
                     };
                 @endphp
 
@@ -45,10 +45,10 @@
             {{-- Прогрес бар --}}
             <div class="mt-6">
                 <div class="flex items-center justify-between text-xs text-[#1A1A1A]/40 mb-2">
-                    <span>Прийнято</span>
-                    <span>Підтверджено</span>
-                    <span>В дорозі</span>
-                    <span>Завершено</span>
+                    <span>{{ __('emails.status_accepted') }}</span>
+                    <span>{{ __('emails.status_pending') }}</span>
+                    <span>{{ __('emails.status_progress') }}</span>
+                    <span>{{ __('emails.status_completed') }}</span>
                 </div>
                 <div class="h-2 bg-[#F2F0EB] rounded-full overflow-hidden">
                     @php
@@ -67,7 +67,7 @@
 
         {{-- Деталі маршруту --}}
         <div class="p-6 border-b border-[#F2F0EB] space-y-4">
-            <h2 class="text-sm font-semibold text-[#1A1A1A]/50 uppercase tracking-wide">Маршрут</h2>
+            <h2 class="text-sm font-semibold text-[#1A1A1A]/50 uppercase tracking-wide">{{ __('emails.route') }}</h2>
 
             <div class="flex gap-4">
                 <div class="flex flex-col items-center pt-1">
@@ -77,11 +77,11 @@
                 </div>
                 <div class="space-y-4 flex-1">
                     <div>
-                        <p class="text-xs text-[#1A1A1A]/40">Звідки</p>
+                        <p class="text-xs text-[#1A1A1A]/40">{{ __('emails.from') }}</p>
                         <p class="text-sm text-[#1A1A1A] font-medium">{{ $order->pickup_address }}</p>
                     </div>
                     <div>
-                        <p class="text-xs text-[#1A1A1A]/40">Куди</p>
+                        <p class="text-xs text-[#1A1A1A]/40">{{ __('emails.to') }}</p>
                         <p class="text-sm text-[#1A1A1A] font-medium">{{ $order->delivery_address }}</p>
                     </div>
                 </div>
@@ -90,25 +90,25 @@
 
         {{-- Деталі замовлення --}}
         <div class="p-6 border-b border-[#F2F0EB]">
-            <h2 class="text-sm font-semibold text-[#1A1A1A]/50 uppercase tracking-wide mb-4">Деталі</h2>
+            <h2 class="text-sm font-semibold text-[#1A1A1A]/50 uppercase tracking-wide mb-4">{{ __('emails.details') }}</h2>
             <div class="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                    <p class="text-[#1A1A1A]/40">Транспорт</p>
+                    <p class="text-[#1A1A1A]/40">{{ __('emails.transport') }}</p>
                     <p class="font-medium text-[#1A1A1A]">{{ $order->vehicleType->name }}</p>
                 </div>
                 @if($order->distance_km)
                     <div>
-                        <p class="text-[#1A1A1A]/40">Відстань</p>
+                        <p class="text-[#1A1A1A]/40">{{ __('emails.distance') }}</p>
                         <p class="font-medium text-[#1A1A1A]">{{ $order->distance_km }} км</p>
                     </div>
                 @endif
                 <div>
-                    <p class="text-[#1A1A1A]/40">Вартість</p>
+                    <p class="text-[#1A1A1A]/40">{{ __('emails.cost') }}</p>
                     <p class="font-medium text-[#1A1A1A]">€{{ number_format($order->total_price, 2) }}</p>
                 </div>
                 @if($order->scheduled_at)
                     <div>
-                        <p class="text-[#1A1A1A]/40">Дата</p>
+                        <p class="text-[#1A1A1A]/40">{{ __('emails.date') }}</p>
                         <p class="font-medium text-[#1A1A1A]">{{ $order->scheduled_at->format('d.m.Y H:i') }}</p>
                     </div>
                 @endif
@@ -118,7 +118,7 @@
         {{-- Водій (якщо призначений) --}}
         @if($order->driver)
             <div class="p-6 border-b border-[#F2F0EB]">
-                <h2 class="text-sm font-semibold text-[#1A1A1A]/50 uppercase tracking-wide mb-4">Ваш водій</h2>
+                <h2 class="text-sm font-semibold text-[#1A1A1A]/50 uppercase tracking-wide mb-4">{{ __('emails.driver') }}</h2>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-[#A68966]/20 flex items-center justify-center">
                     <span class="text-[#A68966] font-bold text-lg">
@@ -139,10 +139,10 @@
         {{-- Футер --}}
         <div class="p-6 text-center">
             <p class="text-xs text-[#1A1A1A]/40">
-                Збережіть це посилання щоб відстежувати статус замовлення
+                {{ __('emails.save_link_track') }}
             </p>
             <p class="text-xs text-[#1A1A1A]/40 mt-1">
-                Питання? Телефонуйте нам або відповідайте на email з підтвердженням
+                {{ __('emails.questions') }}
             </p>
         </div>
     </div>

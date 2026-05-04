@@ -8,18 +8,24 @@ return new class extends Migration
 {
     public function up(): void
     {
+        return;
         // 1. Системні таблиці Laravel
-        Schema::create('cache', function (Blueprint $table) {
-            $table->string('key')->primary();
-            $table->mediumText('value');
-            $table->integer('expiration');
-        });
+        // Буде виглядати приблизно так:
+        if (!Schema::hasTable('cache')) {
+            Schema::create('cache', function (Blueprint $table) {
+                $table->string('key')->primary();
+                $table->mediumText('value');
+                $table->integer('expiration');
+            });
+        }
 
-        Schema::create('cache_locks', function (Blueprint $table) {
-            $table->string('key')->primary();
-            $table->string('owner');
-            $table->integer('expiration');
-        });
+        if (!Schema::hasTable('cache_locks')) {
+            Schema::create('cache_locks', function (Blueprint $table) {
+                $table->string('key')->primary();
+                $table->string('owner');
+                $table->integer('expiration');
+            });
+        }
 
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
@@ -126,10 +132,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('transport', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('name');
-        });
 
         // 4. Основні сутності (Dependent Tables)
         Schema::create('drivers', function (Blueprint $table) {
@@ -169,7 +171,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('orders');
         Schema::dropIfExists('drivers');
-        Schema::dropIfExists('transport');
         Schema::dropIfExists('promo_codes');
         Schema::dropIfExists('vehicle_type');
         Schema::dropIfExists('personal_access_tokens');
@@ -181,5 +182,8 @@ return new class extends Migration
         Schema::dropIfExists('jobs');
         Schema::dropIfExists('cache_locks');
         Schema::dropIfExists('cache');
+
+
+
     }
 };

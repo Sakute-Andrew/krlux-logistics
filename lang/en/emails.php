@@ -1,0 +1,32 @@
+<?php
+return [
+    'created_title' => 'Your order has been received!',
+    'confirmed_title' => 'Order confirmed!',
+    'greeting' => 'Thank you',
+    'hello' => 'Hello',
+    'created_msg' => 'We have received your order.',
+    'confirmed_msg' => 'Your order has been confirmed.',
+    'regards' => 'Best regards',
+
+    'order_title' => 'Order',
+    'status_pending' => 'Pending confirmation',
+    'status_progress' => 'In transit',
+    'status_completed' => 'Completed',
+    'status_cancelled' => 'Cancelled',
+    'status_accepted' => 'Accepted',
+    'route' => 'Route',
+    'from' => 'Pickup',
+    'to' => 'Delivery',
+    'details' => 'Order details',
+    'transport' => 'Vehicle',
+    'distance' => 'Distance',
+    'cost' => 'Cost',
+    'date' => 'Date',
+    'driver' => 'Your driver',
+    'track_order' => 'Track order',
+    'save_link_track' => 'Save this link to track your order status',
+    'questions' => 'Questions? Call us or reply to the confirmation email',
+
+    'created_title_garbage' => 'Your junk removal request has been received!',
+    'garbage_intro_text' => 'Thank you! We have received your junk removal request. Our team is preparing for the pickup at your address.',
+];
