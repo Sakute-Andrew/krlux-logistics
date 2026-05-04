@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // 2. Дозволяємо передачу сесій через HTTPS
         $middleware->statefulApi();
+
+        $middleware->api(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

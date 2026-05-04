@@ -22,10 +22,10 @@ class OrderController extends Controller
             'email'            => 'nullable|email|max:255',
             'vehicle_type_id'  => 'required|exists:vehicle_type,id',
             'pickup_address'   => 'required|string',
-            'delivery_address' => 'required|string',
+            'delivery_address' => 'required_if:service_type,transport|nullable|string',
             'distance_km'      => 'nullable|numeric|min:0',
-            //'scheduled_at'     => 'nullable|date',
             'customer_note'    => 'nullable|string',
+            'service_type'     => 'nullable|in:transport,garbage',
         ]);
 
         // Рахуємо ціну на бекенді (не довіряємо фронту)
@@ -35,16 +35,20 @@ class OrderController extends Controller
 
         $order = Order::create([
             ...$validated,
-            'tracking_token' => Str::uuid(),
-            'total_price'    => round($totalPrice, 2),
-            'status'         => 'pending',
+            'delivery_address' => $validated['delivery_address'] ?? null,
+            'tracking_token'   => Str::uuid(),
+            'total_price'      => round($totalPrice, 2),
+            'status'           => 'pending',
+            'locale'           => app()->getLocale(),
         ]);
 
         Log::info('Order created: ' . $order->id . ', email: ' . $order->email);
 
         if ($order->email) {
             Log::info('Sending email...');
-            Mail::to($order->email)->send(new OrderCreated($order));
+            Mail::to($order->email)
+                ->locale($order->locale)
+                ->send(new OrderCreated($order));
             Log::info('Email sent!');
         }
 

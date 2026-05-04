@@ -19,8 +19,12 @@ class OrderCreated extends Mailable
 
     public function envelope(): Envelope
     {
+        $subjectKey = $this->order->service_type === 'garbage'
+            ? 'emails.created_title_garbage'
+            : 'emails.created_title';
+
         return new Envelope(
-            subject: "Замовлення #{$this->order->id} прийнято — KrLux Logistics",
+            subject: __($subjectKey) . " #{$this->order->id} — KrLux Logistics",
         );
     }
 

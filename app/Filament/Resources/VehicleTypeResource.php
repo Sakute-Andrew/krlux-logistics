@@ -16,6 +16,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Grid;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Tabs;
 
 class VehicleTypeResource extends Resource
 {
@@ -28,30 +29,83 @@ class VehicleTypeResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Основна інформація')
+                Section::make('Локалізація назви та опису')
+                    ->description('Введіть дані для кожної мови окремо')
+                    ->schema([
+                        Tabs::make('Languages')
+                            ->tabs([
+                                // Німецька (Основна)
+                                Tabs\Tab::make('Deutsch')
+                                    ->icon('heroicon-m-language')
+                                    ->schema([
+                                        TextInput::make('name_de')
+                                            ->label('Name (DE)')
+                                            ->required()
+                                            ->placeholder('z.B. Sprinter Maxi'),
+                                        Textarea::make('description_de')
+                                            ->label('Beschreibung (DE)')
+                                            ->rows(3),
+                                    ]),
+
+                                // Українська
+                                Tabs\Tab::make('Українська')
+                                    ->icon('heroicon-m-language')
+                                    ->schema([
+                                        TextInput::make('name_uk')
+                                            ->label('Назва (UK)')
+                                            ->required()
+                                            ->placeholder('Наприклад: Спрінтер Максі'),
+                                        Textarea::make('description_uk')
+                                            ->label('Опис (UK)')
+                                            ->rows(3),
+                                    ]),
+
+                                // Англійська
+                                Tabs\Tab::make('English')
+                                    ->icon('heroicon-m-language')
+                                    ->schema([
+                                        TextInput::make('name_en')
+                                            ->label('Name (EN)')
+                                            ->placeholder('e.g. Sprinter Maxi'),
+                                        Textarea::make('description_en')
+                                            ->label('Description (EN)')
+                                            ->rows(3),
+                                    ]),
+
+                                // Російська
+                                Tabs\Tab::make('Русский')
+                                    ->icon('heroicon-m-language')
+                                    ->schema([
+                                        TextInput::make('name_ru')
+                                            ->label('Название (RU)')
+                                            ->placeholder('Например: Спринтер Макси'),
+                                        Textarea::make('description_ru')
+                                            ->label('Описание (RU)')
+                                            ->rows(3),
+                                    ]),
+                            ])->columnSpanFull(),
+                    ]),
+
+                Section::make('Технічні параметри та Медіа')
                     ->schema([
                         Grid::make(2)->schema([
-                            TextInput::make('name')
-                                ->label('Назва авто')
-                                ->required()
-                                ->placeholder('Наприклад: Sprinter Maxi'),
-
                             TextInput::make('slug')
                                 ->label('URL-ім\'я (slug)')
                                 ->required()
                                 ->unique(ignoreRecord: true),
+
+                            Toggle::make('is_active')
+                                ->label('Активний (показувати на сайті)')
+                                ->default(true)
+                                ->inline(false),
                         ]),
 
                         FileUpload::make('image_path')
                             ->label('Фото автомобіля')
                             ->image()
+                            ->disk('public')
                             ->directory('vehicles')
                             ->visibility('public')
-                            ->columnSpanFull(),
-
-                        Textarea::make('description')
-                            ->label('Опис для клієнта')
-                            ->rows(3)
                             ->columnSpanFull(),
                     ]),
 
@@ -83,10 +137,6 @@ class VehicleTypeResource extends Resource
                                 ->prefix('€'),
                         ]),
                     ]),
-
-                Toggle::make('is_active')
-                    ->label('Активний (показувати на сайті)')
-                    ->default(true),
             ]);
     }
 
